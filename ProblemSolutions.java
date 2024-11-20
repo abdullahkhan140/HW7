@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Abdullah I Khan Section 002
  *
  *   This java file contains the problem solutions for the methods selectionSort,
  *   mergeSortDivisibleByKFirst, asteroidsDestroyed, and numRescueCanoes methods.
@@ -31,22 +31,23 @@ public class ProblemSolutions {
     public  void selectionSort(int[] values) {
         selectionSort(values, true);
     }
-
     public static void selectionSort(int[] values, boolean ascending ) {
-
         int n = values.length;
-
         for (int i = 0; i < n - 1; i++) {
-
-            // YOU CODE GOES HERE -- COMPLETE THE INNER LOOP OF THIS
-            // "SELECTION SORT" ALGORITHM.
-            // DO NOT FORGET TO ADD YOUR NAME / SECTION ABOVE
-
-        }
-
-    } // End class selectionSort
-
-
+             int indexToSwap = i;
+                for (int b = i + 1; b < values.length; b++) {
+                    if ((ascending == (values[b] < values[indexToSwap]))) {
+                        indexToSwap = b;
+                    }
+                }
+                if (indexToSwap != i) {
+                    int swapVar = values[i];
+                    values[i] = values[indexToSwap];
+                    values[indexToSwap] = swapVar;
+                }
+            }
+        } 
+    // End class selectionSort
     /**
      *  Method mergeSortDivisibleByKFirst
      *
@@ -92,21 +93,35 @@ public class ProblemSolutions {
 
     private void mergeDivisbleByKFirst(int arr[], int k, int left, int mid, int right)
     {
-        // YOUR CODE GOES HERE, THIS METHOD IS NO MORE THAN THE STANDARD MERGE PORTION
-        // OF A MERGESORT, EXCEPT THE NUMBERS DIVISIBLE BY K MUST GO FIRST WITHIN THE
-        // SEQUENCE PER THE DISCUSSION IN THE PROLOGUE ABOVE.
-        //
-        // NOTE: YOU CAN PROGRAM THIS WITH A SPACE COMPLEXITY OF O(1) OR O(N LOG N).
-        // AGAIN, THIS IS REFERRING TO SPACE COMPLEXITY. O(1) IS IN-PLACE, O(N LOG N)
-        // ALLOCATES AUXILIARY DATA STRUCTURES (TEMPORARY ARRAYS). IT WILL BE EASIER
-        // TO CODE WITH A SPACE COMPLEXITY OF O(N LOG N), WHICH IS FINE FOR PURPOSES
-        // OF THIS PROGRAMMING EXERCISES.
-
-        return;
-
+       int[] subArrays = new int [right - left +1];
+       int a = left, c = mid + 1, z = 0; 
+        // Merge 2 sorted subarrays while making sure that numbers divisible by k are first
+        while  (a <= mid && c <= right){
+            if(arr[a] % k == 0) {
+               subArrays[z++] = arr[a++];
+            }
+             // If arr[c] is divisible by k, place it first
+            else if (arr[c] % k == 0) {
+                subArrays[z++] = arr[c++];
+            }
+            // Otherwise, place the smaller element in the subArrays
+            else if (arr[a] <= arr[c]) {
+                subArrays[z++] = arr[a++];
+            } else {
+                subArrays[z++] = arr[c++];
+            }
+        }
+        // Copy remaining elements from both arrays
+        while (a <= mid) {
+           subArrays[z++] = arr[a++];
+        }
+        while (c <= right) {
+            subArrays[z++] = arr[c++];
+        }
+        for (int b = 0; b < subArrays.length; b++) {
+            arr[left + b] = subArrays[b];
+        }
     }
-
-
     /**
      * Method asteroidsDestroyed
      *
@@ -153,14 +168,15 @@ public class ProblemSolutions {
      */
 
     public static boolean asteroidsDestroyed(int mass, int[] asteroids) {
-
-        // YOUR CODE GOES HERE, CONSIDER USING ARRAYS.SORT()
-
-        return false;
-
+      Arrays.sort(asteroids); // sort array asteroids to handle smaller asteroids first
+        for (int someNumberAsteroid : asteroids) { // iterate each asteroid in array 
+            if (mass <someNumberAsteroid){ // if current mass is smaller than mass of asteroid, return false
+                return false;
+            }
+            mass += someNumberAsteroid; // if someNumberAsteroid is in control, increase mass 
+        }
+        return true; // if all asteroids are taken down, return true
     }
-
-
     /**
      * Method numRescueSleds
      *
@@ -191,12 +207,18 @@ public class ProblemSolutions {
      */
 
     public static int numRescueSleds(int[] people, int limit) {
+    Arrays.sort(people); // sort array "people" for people and their weight limit
+        int a = 0, b = people.length - 1; // initialize pointers
+        int sledsToUse = 0; // var for counting # sleds being used
 
-        // YOUR CODE GOES HERE, CONSIDER USING ARRAYS.SORT
-
-        return -1;
-
+        while (a <= b) { //Iterate unitl all have been paired
+            if (people[a] + people[b] <= limit) { // check if weight and people limit is possible for every person
+                a++; // Lightest person
+            }
+            b--; // Heaviest person
+            sledsToUse++; // if sled used, increment counter
+        }
+        return sledsToUse; // return number of total sleds used
     }
-
 } // End Class ProblemSolutions
 
